@@ -13,33 +13,35 @@ import java.util.Scanner;
 
 public class Main {
 
-	static Scanner scan = new Scanner(System.in);
-	static PrintWriter writer;
-	static File file = new File("exported-primes.txt");
-	static TimeClass tc = new TimeClass();
-	static Thread thread = new Thread(new TimeClass());
+	private static Scanner scan = new Scanner(System.in);
+	private static PrintWriter writer;
+	private static FileWriter fileWriter;
+	private static File file = new File("exported-primes.txt");
+	private static TimeClass tc = new TimeClass();
+	private static Thread thread = new Thread(new TimeClass());
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("Enter start number: ");
 		int start = scan.nextInt();
+		
 		System.out.println("Enter end number: ");
 		int end = scan.nextInt();
+		
 		int var = start;
 		
 		try {
-			FileWriter fileWriter = new FileWriter(file); //Appends File
-		      writer = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
-		} catch (UnsupportedEncodingException | FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			fileWriter = new FileWriter(file); //Appends File
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+		} catch (Exception e) {
+			System.err.println("Error Code 01: An Error Has Occured in the Opening of the File");
 			e.printStackTrace();
 		}
 		
 		tc.setValues(end-start, start);
 		thread.start();
+		
+		//Start of Main Loop
 		while(var<=end){ //main thread
 			if(isPrime(var)){
 				//System.out.println(var);
@@ -48,13 +50,15 @@ public class Main {
 			var++;
 			tc.setCurrentValue(var);
 		}
+		//End of Main Loop
+		
 		System.out.println("Finished after " + tc.getTime() + " seconds");
 		System.exit(0);
 	}
 	
-	private static boolean isPrime(int variable){
-		for(int x = 2; x<variable; x++){
-			if(variable%x==0){
+	private static boolean isPrime(int testNum){
+		for(int x = 2; x < testNum ; x++){
+			if(testNum % x == 0){
 				return false;
 			}
 		}
